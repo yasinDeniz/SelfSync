@@ -1,0 +1,6 @@
+@SelfSync_HostAddress = http://localhost:5227
+
+GET {{SelfSync_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
