@@ -39,8 +39,8 @@ namespace SelfSync.Controllers
             return apiKey;
         }
 
-        [HttpPost("reset-rate-limit")]
-        public IActionResult ResetRateLimit([FromHeader(Name = "X-API-Key")] string apiKey, [FromBody] ResetRateLimitRequest request)
+        [HttpGet("reset-rate-limit")]
+        public IActionResult ResetRateLimit([FromHeader(Name = "X-API-Key")] string apiKey, [FromQuery] string ipAddress, [FromQuery] string endpointPath)
         {
             // API anahtarını doğrula
             if (string.IsNullOrEmpty(_apiKey))
@@ -55,25 +55,25 @@ namespace SelfSync.Controllers
             }
 
             // IP adresi ve endpoint kontrol et
-            if (string.IsNullOrEmpty(request.IpAddress) || string.IsNullOrEmpty(request.EndpointPath))
+            if (string.IsNullOrEmpty(ipAddress) || string.IsNullOrEmpty(endpointPath))
             {
                 return BadRequest("IP adresi ve endpoint path gereklidir");
             }
 
-            bool success = RequestRateLimitAttribute.ResetRateLimit(request.IpAddress, request.EndpointPath);
+            bool success = RequestRateLimitAttribute.ResetRateLimit(ipAddress, endpointPath);
             
             if (success)
             {
-                _logger.LogInformation("Rate limit başarıyla sıfırlandı: {IpAddress} - {Endpoint}", request.IpAddress, request.EndpointPath);
-                return Ok(new { message = $"{request.IpAddress} IP adresi için {request.EndpointPath} endpoint'inin rate limiti başarıyla sıfırlandı" });
+                _logger.LogInformation("Rate limit başarıyla sıfırlandı: {IpAddress} - {Endpoint}", ipAddress, endpointPath);
+                return Ok(new { message = $"{ipAddress} IP adresi için {endpointPath} endpoint'inin rate limiti başarıyla sıfırlandı" });
             }
             else
             {
-                return NotFound(new { message = $"{request.IpAddress} IP adresi için {request.EndpointPath} endpoint'inde aktif rate limit kaydı bulunamadı" });
+                return NotFound(new { message = $"{ipAddress} IP adresi için {endpointPath} endpoint'inde aktif rate limit kaydı bulunamadı" });
             }
         }
 
-        [HttpPost("reset-all-rate-limits")]
+        [HttpGet("reset-all-rate-limits")]
         public IActionResult ResetAllRateLimits([FromHeader(Name = "X-API-Key")] string apiKey)
         {
             // API anahtarını doğrula
@@ -93,11 +93,5 @@ namespace SelfSync.Controllers
             
             return Ok(new { message = "Tüm rate limitler başarıyla sıfırlandı" });
         }
-    }
-
-    public class ResetRateLimitRequest
-    {
-        public string IpAddress { get; set; }
-        public string EndpointPath { get; set; }
     }
 } 

@@ -85,18 +85,13 @@ GET /Projects/lastmodified/test.queries
 
 Rate limiti sıfırlama (belirli bir IP ve endpoint için):
 ```
-POST /Admin/reset-rate-limit
+GET /Admin/reset-rate-limit?ipAddress=192.168.1.1&endpointPath=/Projects/test.queries
 X-API-Key: sizin_gizli_anahtariniz
-
-{
-  "ipAddress": "192.168.1.1",
-  "endpointPath": "/Projects/test.queries"
-}
 ```
 
 Tüm rate limitleri sıfırlama:
 ```
-POST /Admin/reset-all-rate-limits
+GET /Admin/reset-all-rate-limits
 X-API-Key: sizin_gizli_anahtariniz
 ```
 
