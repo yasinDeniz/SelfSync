@@ -19,7 +19,7 @@ namespace SelfSync.Controllers
         }
 
         [HttpGet("{path}")]
-        [RequestRateLimit(maxRequests: 10, timeWindowInHours: 1)]
+        [RequestRateLimit(maxRequests: 20, timeWindowInHours: 1)]
         public IActionResult DownloadFolder(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -86,7 +86,6 @@ namespace SelfSync.Controllers
         }
 
         [HttpGet("lastmodified/{path}")]
-        [RequestRateLimit(maxRequests: 10, timeWindowInHours: 1)]
         public IActionResult GetLastModifiedDate(string path)
         {
             if (string.IsNullOrEmpty(path))
